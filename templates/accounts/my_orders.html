@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+
+<!-- ========================= SECTION CONTENT ========================= -->
+<section class="section-conten padding-y bg">
+
+<div class="container">
+	<div class="row">
+	<aside class="col-md-3">
+		<!--   SIDEBAR   -->
+		{% include 'navi_of_dashboard.html' %}
+		<!--   SIDEBAR .//END   -->
+	</aside>
+	<main class="col-md-9">
+		{% if not orders %}<h4>You have no order yet!</h4>{% endif %}
+		{% for order in orders %}
+		<article class="card">
+		<header class="card-header">
+			<strong class="d-inline-block mr-3">Order ID: {{ order.order_number }}</strong>
+			<span>Order Date: {{ order.created_at }}</span>
+		</header>
+		<div class="card-body">
+			<div class="row"> 
+				<div class="col-md-8">
+					<h6 class="text-muted">Delivery to</h6>
+					<p>{{ order.full_name }} <br>
+					Phone: {{ order.phone }}  Email: {{ order.email }} <br>
+			    	Location: {{ order.full_address }}, {{ order.city }}, {{ order.state }}, {{ order.zipcode }} <br>
+			 		</p>
+				</div>
+				<div class="col-md-4">
+					<h6 class="text-muted">Payment</h6>
+					<span class="text-success">
+						Paypal: {{ order.payment }}
+					</span>
+					<br>
+					 <span class="b">Total:  ${{ order.order_total }} </span>
+					</p>
+				</div>
+			</div> <!-- row.// -->
+		</div> <!-- card-body .// -->
+		<div class="table-responsive">
+		<table class="table table-hover">
+			{% for product in order.products %}
+			<tr>
+				<td width="65">
+					<img src="{{ product.product.images.url }}" class="img-xs border">
+				</td>
+				<td> 
+					<p class="title mb-0">{{ product.product.product_name }} X {{ product.quantity }} </p>
+					<var class="price text-muted">USD {{ product.product_price }}</var>
+				</td>
+				<td width="250">
+<!--				 <a href="#" class="btn btn-outline-primary">Track order</a>-->
+					<a href="{% url 'order_detail'  order.order_number %}" class="btn btn-light"> Details </a>
+				</td>
+			</tr>
+
+			{% endfor %}
+
+		</table>
+
+		</div> <!-- table-responsive .end// -->
+		</article> <!-- order-group.// -->
+		<br>
+		{% endfor %}
+
+	</main>
+</div> <!-- row.// -->
+</div>
+
+
+</section>
+<!-- ========================= SECTION CONTENT END// ========================= -->
+
+
+{% endblock %}

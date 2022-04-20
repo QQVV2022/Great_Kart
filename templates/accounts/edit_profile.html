@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+
+<!-- ========================= SECTION CONTENT ========================= -->
+<section class="section-conten padding-y bg">
+{% include 'alert.html' %}
+<div class="container">
+	<div class="row">
+	<aside class="col-md-3">
+		<!--   SIDEBAR   -->
+		{% include 'navi_of_dashboard.html' %}
+		<!--   SIDEBAR .//END   -->
+	</aside>
+
+	<main class="col-md-9">
+			<article class="card">
+				<header class="card-header">
+					<strong class="d-inline-block mr-3">Edit your profile</strong>
+				</header>
+				<div class="card-body">
+					<form action="{% url 'edit_profile' %}" method="POST" enctype="multipart/form-data">
+						<div class="row">
+							<div class="col-12 col-sm-auto mb-3">
+								<div class="mx-auto" style="width: 140px;">
+									<div class="d-flex justify-content-center align-items-center rounded" style="height: 140px; background-color: rgb(233, 236, 239);">
+										<span style="color: rgb(166, 168, 170); font: bold 8pt Arial;">
+												<img src="{{ profile_form.profile_picture.url }}" alt="Profile Picture" width="100%" style="border-radius:5px;" id="preview" class="img-thumbnail">
+
+										</span>
+									</div>
+								</div>
+							</div>
+							<div class="col d-flex flex-column flex-sm-row justify-content-between mb-3">
+								<div class="text-center text-sm-left mb-2 mb-sm-0">
+									<h4 class="pt-sm-2 pb-1 mb-0 text-nowrap">{{ user_form.full_name}}</h4>
+									<p class="mb-0">{{ user_form.email}}</p>
+									<div class="text-muted"><small>Joined {{ user_form.date_join}}</small></div>
+									<div class="mt-2">
+
+										<input type="file" name="img" class="file"  accept="image/*">
+
+										<input type="text" class="form-control file" disabled placeholder="" id="file" >
+										<div class="input-group-append">
+											<button type="button" class="browse btn btn-primary">
+											<i class="fa fa-fw fa-camera"></i>
+											<span>Change Photo</span></button>
+
+										</div>
+
+									</div>
+								</div>
+
+							</div>
+						</div>
+
+						<div class="row">
+						<div class="col-md-12">
+								{% csrf_token %}
+								<div class="form-row">
+									<div class="form-inline form-group col-md-6">
+										<label class="col-md-4 col-form-label " style="justify-content: left;">First Name  </label>
+										<input type="text" class="form-control col-md-8" name="first_name" placeholder="" value="{{user_form.first_name}}">
+									</div>
+									<div class="form-inline form-group col-md-6">
+										<label class="col-md-4 col-form-label " style="justify-content: left;">Last Name</label>
+										<input type="text" class="form-control col-md-8" name="last_name" placeholder="" value="{{user_form.last_name}}">
+									</div>
+								</div>
+							<div class="form-row">
+								<div class="form-inline form-group col-md-6">
+										<label class="col-md-4 col-form-label" style="justify-content: left;">Phone Number:</label>
+										<input type="text" class="form-control col-md-8" name="phone" placeholder="" value="{{user_form.phone_number}}">
+
+								</div>
+							</div>
+								<div class="form-inline form-group">
+									<label class="col-md-2 col-form-label" style="justify-content: left;">Address Line 1: </label>
+									<input type="text" class="form-control col-md-10"  name="address1" value="{{profile_form.address_line_1}}" >
+								</div>
+								<div class="form-inline form-group">
+									<label class="col-md-2 col-form-label" style="justify-content: left;">Address Line 2: </label>
+									<input type="text" class="form-control col-md-10"  name="address2" value="{{profile_form.address_line_2}}" >
+
+								</div>
+								<div class="form-inline form-row">
+									<div class="form-group col-md-4">
+										<label class="col-md-3 col-form-label" style="justify-content: left;">City </label>
+										<input type="text" class="form-control col-md-9" name="city" placeholder="" value="{{profile_form.city}}">
+
+									</div>
+									<div class="form-group col-md-4">
+										<label class="col-md-3 col-form-label" style="justify-content: left;">State </label>
+										<input type="text" class="form-control col-md-9" name="state" placeholder="" value="{{profile_form.state}}">
+
+
+									</div>
+									<div class="form-group col-md-4">
+										<label class="col-md-4 col-form-label" style="justify-content: left;">Zipcode </label>
+										<input type="text" class="form-control col-md-8" name="zipcode" placeholder="" value="{{profile_form.zipcode}}">
+
+									</div>
+								</div>
+
+								<input type="submit" value="Save" class="btn btn-primary">
+
+						</div>
+
+					</div> <!-- row.// -->
+					</form>
+				</div> <!-- card-body .// -->
+
+			</article> <!-- order-group.// -->
+		</main>
+</div> <!-- row.// -->
+</div>
+
+
+</section>
+<!-- ========================= SECTION CONTENT END// ========================= -->
+<script>
+	$(document).on("click", ".browse", function() {
+	  var file = $(this).parents().find(".file");
+	  file.trigger("click");
+	});
+	$('input[type="file"]').change(function(e) {
+	  var fileName = e.target.files[0].name;
+	  $("#file").val(fileName);
+
+	  var reader = new FileReader();
+	  reader.onload = function(e) {
+		// get loaded data and render thumbnail.
+		document.getElementById("preview").src = e.target.result;
+	  };
+	  // read the image file as a data URL.
+	  reader.readAsDataURL(this.files[0]);
+	});
+</script>
+
+{% endblock %}

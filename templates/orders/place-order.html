@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<section class="section-content padding-y bg">
+<div class="container">
+
+
+
+<!-- ============================ COMPONENT 2 ================================= -->
+<form action="{% url 'place_order' %}" method="post">
+	{% csrf_token %}
+<div class="row">
+	<main class="col-md-8">
+		{% include "alert.html" %}
+<article class="card mb-4">
+<div class="card-body">
+	<h4 class="card-title mb-4">Review cart</h4>
+	<div class="row">
+		{% for item in cart_items %}
+		<div class="col-md-6">
+			<figure class="itemside  mb-4">
+				<div class="aside"><img src="{{item.product.images.url}}" class="border img-sm"></div>
+				<figcaption class="info">
+					<p>{{ item.product.product_name }}
+						{% for v in item.variations.all %}
+							 {{ v.variation_value | capfirst }}
+						{% endfor %}
+					</p>
+					<span class="text-muted">{{ item.quantity }}x = ${{ item.sub_total_price }} </span>
+				</figcaption>
+			</figure>
+		</div> <!-- col.// -->
+		{% endfor %}
+
+	</div> <!-- row.// -->
+</div> <!-- card-body.// -->
+</article> <!-- card.// -->
+
+<article class="card mb-4">
+	<div class="card">
+		<div class="card-body">
+			<h4 class="card-title mb-4">Billing Address</h4>
+
+				{% csrf_token %}
+				<div class="form-row">
+					<div class="col form-group">
+						<label for="">First Name</label>
+						<input type="text" name="first_name" class="form-control" required>
+					</div>
+					<div class="col form-group">
+						<label for="">Last Name</label>
+						<input type="text" name="last_name" class="form-control" required>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="col form-group">
+						<label for="">Email</label>
+						<input type="email" name="email" class="form-control" required>
+					</div>
+					<div class="col form-group">
+						<label for="">Phone Number</label>
+						<input type="text" name="phone" class="form-control" required>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="col form-group">
+						<label for="">Address Line 1</label>
+						<input type="text" name="address_line_1" class="form-control" required>
+					</div>
+					<div class="col form-group">
+						<label for="">Address Line 2</label>
+						<input type="text" name="address_line_2" class="form-control">
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="col form-group">
+						<label for="">zipcode</label>
+						<input type="text" name="zipcode" class="form-control" required>
+					</div>
+					<div class="col form-group">
+						<label for="">City</label>
+						<input type="text" name="city" class="form-control" required>
+					</div>
+					<div class="col form-group">
+						<label for="">State</label>
+						<input type="text" name="state" class="form-control" required>
+					</div>
+
+				</div>
+				<div class="form-row">
+					<label for="">Order Note</label>
+					<textarea name="order_note" rows="2" class="form-control"></textarea>
+				</div>
+
+		</div>
+	</div> <!-- card.// -->
+</article> <!-- card.// -->
+		<article class="accordion" id="accordion_pay">
+			<div class="card">
+				<header class="card-header">
+					<img src="{% static 'images/misc/payment-paypal.png' %}" class="float-right" height="24">
+					<label class="form-check collapsed" data-toggle="collapse" data-target="#pay_paynet">
+						<input class="form-check-input" name="payment-option" checked type="radio" value="paypal">
+						<h6 class="form-check-label">
+							Paypal
+						</h6>
+					</label>
+				</header>
+				<div id="pay_paynet" class="collapse show" data-parent="#accordion_pay">
+					<div class="card-body">
+						<p class="text-center text-muted">Connect your PayPal account and use it to pay your bills. You'll be redirected to PayPal to add your billing information.</p>
+						<p class="text-center">
+							<a href="#"><img src="{% static 'images/misc/btn-paypal.png' %}" height="32"></a>
+							<br><br>
+						</p>
+					</div> <!-- card body .// -->
+				</div> <!-- collapse .// -->
+			</div> <!-- card.// -->
+			<div class="card">
+				<header class="card-header">
+					<img src="{% static 'images/misc/payment-card.png' %}" class="float-right" height="24">
+					<label class="form-check" data-toggle="collapse" data-target="#pay_payme">
+						<input class="form-check-input" name="payment-option" type="radio" value="creditcard">
+						<h6 class="form-check-label"> Credit Card  </h6>
+					</label>
+				</header>
+				<div id="pay_payme" class="collapse" data-parent="#accordion_pay">
+					<div class="card-body">
+						<p class="alert alert-success">Some information or instruction</p>
+						<form class="form-inline">
+							<input type="text" class="form-control mr-2" placeholder="xxxx-xxxx-xxxx-xxxx" name="">
+							<input type="text" class="form-control mr-2" style="width: 100px"  placeholder="dd/yy" name="">
+							<input type="number" maxlength="3" class="form-control mr-2"  style="width: 100px"  placeholder="cvc" name="">
+							<button class="btn btn btn-success">Button</button>
+						</form>
+					</div> <!-- card body .// -->
+				</div> <!-- collapse .// -->
+			</div> <!-- card.// -->
+
+		</article>
+
+<!-- accordion end.// -->
+  
+		</main> <!-- col.// -->
+		<aside class="col-md-4">
+			<div class="card">
+		<div class="card-body">
+			<dl class="dlist-align">
+			  <dt>Total price:</dt>
+			  <dd class="text-right">${{ total_price }}</dd>
+			</dl>
+			<dl class="dlist-align">
+			  <dt>Tax:</dt>
+			  <dd class="text-right"> ${{ tax }}</dd>
+			</dl>
+			<dl class="dlist-align">
+			  <dt>Total:</dt>
+			  <dd class="text-right text-dark b"><strong>${{ total }}</strong></dd>
+			</dl>
+			<hr>
+			<p class="text-center mb-3">
+				<img src="{% static 'images/misc/payments.png' %}" height="26">
+			</p>
+			<input class="btn btn-primary btn-block" type="submit" value="Place Order">  </input>
+			
+		</div> <!-- card-body.// -->
+		</div> <!-- card.// -->
+		</aside> <!-- col.// -->
+	</div> <!-- row.// -->
+
+<!-- ============================ COMPONENT 2 END//  ================================= -->
+
+	</form>
+
+
+</div> <!-- container .//  -->
+</section>
+<!-- ========================= SECTION CONTENT END// ========================= -->
+
+
+<!-- ========================= SECTION CONTENT END// ========================= -->
+{% endblock %}
