@@ -27,7 +27,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = ['django-env.eba-gys8k2sq.us-west-2.elasticbeanstalk.com','127.0.0.1'
+ALLOWED_HOSTS = ['django-env2.eba-aenfdcw4.us-west-2.elasticbeanstalk.com','127.0.0.1'
     ,'Djangog-env2.eba-e2q3vtn9.us-west-2.elasticbeanstalk.com']
 
 
